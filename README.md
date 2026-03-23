@@ -168,15 +168,6 @@ Tài khoản test:
 
 ---
 
-## 🌿 Quy trình làm việc nhóm (Git Flow)
-
-```
-main
-└── develop               ← nhánh phát triển chung
-    ├── feature/quy-...   ← nhánh tính năng của Quý
-    └── feature/duc-...   ← nhánh tính năng của Đức
-```
-
 ### Mỗi khi làm tính năng mới:
 
 ```bash
@@ -185,14 +176,14 @@ git checkout develop
 git pull origin develop
 
 # 2. Tạo nhánh tính năng
-git checkout -b feature/quy-ten-tinh-nang
+git checkout -b feature/ten-tinh-nang
 
 # 3. Làm xong → commit
 git add .
 git commit -m "feat: mô tả tính năng"
 
 # 4. Push lên remote
-git push origin feature/quy-ten-tinh-nang
+git push origin feature/ten-tinh-nang
 
 # 5. Tạo Pull Request trên GitHub: feature → develop
 ```
