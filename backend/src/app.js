@@ -22,7 +22,7 @@ app.use('/api/categories', require('./routers/categoryRoutes'));
 
 // Sprint 3 → uncomment khi làm
 // app.use('/api/orders',   require('./routers/orderRoutes'));
-// app.use('/api/coupons',  require('./routers/couponRoutes'));
+app.use('/api/coupons',  require('./routers/couponRoutes'));
 
 // Sprint 4 → uncomment khi làm
 // app.use('/api/admin', require('./src/routers/adminRoutes'));
