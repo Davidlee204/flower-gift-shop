@@ -51,26 +51,26 @@ const validateResetPassword = (req, res, next) => {
   next();
 };
 
-// // ── Validate địa chỉ (dùng cho FGS-45) ───────────────────────────────────────
-// const validateAddress = (req, res, next) => {
-//   const { fullName, phone, street, district, city } = req.body;
-//   const errors = [];
+// ── Validate địa chỉ (dùng cho FGS-45) ───────────────────────────────────────
+const validateAddress = (req, res, next) => {
+  const { fullName, phone, street, district, city } = req.body;
+  const errors = [];
 
-//   if (!fullName?.trim())         errors.push('Vui lòng nhập tên người nhận');
-//   if (!phone?.trim())            errors.push('Vui lòng nhập số điện thoại');
-//   else if (!isValidPhone(phone)) errors.push('Số điện thoại không hợp lệ');
-//   if (!street?.trim())           errors.push('Vui lòng nhập địa chỉ');
-//   if (!district?.trim())         errors.push('Vui lòng nhập quận/huyện');
-//   if (!city?.trim())             errors.push('Vui lòng nhập tỉnh/thành phố');
+  if (!fullName?.trim())         errors.push('Vui lòng nhập tên người nhận');
+  if (!phone?.trim())            errors.push('Vui lòng nhập số điện thoại');
+  else if (!isValidPhone(phone)) errors.push('Số điện thoại không hợp lệ');
+  if (!street?.trim())           errors.push('Vui lòng nhập địa chỉ');
+  if (!district?.trim())         errors.push('Vui lòng nhập quận/huyện');
+  if (!city?.trim())             errors.push('Vui lòng nhập tỉnh/thành phố');
 
-//   if (errors.length) return next(new AppError(errors.join(', '), 400));
-//   next();
-// };
+  if (errors.length) return next(new AppError(errors.join(', '), 400));
+  next();
+};
 
-// module.exports = {
-//   validateRegister,
-//   validateLogin,
-//   validateForgotPassword,
-//   validateResetPassword,
-//   validateAddress,
-// };
+module.exports = {
+  validateRegister,
+  validateLogin,
+  validateForgotPassword,
+  validateResetPassword,
+  validateAddress,
+};
