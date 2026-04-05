@@ -1,6 +1,6 @@
 const express      = require('express');
 const cors         = require('cors');
-const errorHandler = require('./src/middlewares/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
@@ -10,19 +10,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Routes Sprint 1 ───────────────────────────────────────────────────────────
-const authRoutes              = require('./src/routers/authRoutes');
-const { userRouter }          = require('./src/routers/authRoutes');
+const authRoutes              = require('./routers/authRoutes');
+const { userRouter }          = require('./routers/authRoutes');
 
 app.use('/api/auth',  authRoutes);
 app.use('/api/users', userRouter);
 
-// Sprint 2 → uncomment khi làm
-// app.use('/api/products',   require('./src/routers/productRoutes'));
-// app.use('/api/categories', require('./src/routers/categoryRoutes'));
+// Sprint 2 → mở API backend cho frontend HomePage
+app.use('/api/products',   require('./routers/productRoutes'));
+app.use('/api/categories', require('./routers/categoryRoutes'));
 
 // Sprint 3 → uncomment khi làm
-// app.use('/api/orders',   require('./src/routers/orderRoutes'));
-// app.use('/api/coupons',  require('./src/routers/couponRoutes'));
+// app.use('/api/orders',   require('./routers/orderRoutes'));
+// app.use('/api/coupons',  require('./routers/couponRoutes'));
 
 // Sprint 4 → uncomment khi làm
 // app.use('/api/admin', require('./src/routers/adminRoutes'));
