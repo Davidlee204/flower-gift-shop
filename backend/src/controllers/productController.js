@@ -54,7 +54,7 @@ exports.getAll = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-// ── GET /api/products/search?q=... ────────────────────────────────────────────
+// ── GET /api/products/search?q=... ───── FGS-49
 exports.search = async (req, res, next) => {
   try {
     const { q, page = 1, limit = 12 } = req.query;
