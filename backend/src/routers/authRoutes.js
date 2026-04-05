@@ -21,10 +21,10 @@ const { protect } = require('../middlewares/authMiddleware');
 // ── FGS-41 Đăng ký ───────────────────────────────────────────────────────────
 router.post('/register', validateRegister, register);
 
-// // ── FGS-42 Đăng nhập / Đăng xuất / Refresh ───────────────────────────────────
-// router.post('/login',         validateLogin, login);
-// router.post('/logout',        protect, logout);
-// router.post('/refresh-token', refreshToken);
+// ── FGS-42 Đăng nhập / Đăng xuất / Refresh ───────────────────────────────────
+router.post('/login',         validateLogin, login);
+router.post('/logout',        protect, logout);
+router.post('/refresh-token', refreshToken);
 
 // // ── FGS-43 Quên / Đặt lại mật khẩu ──────────────────────────────────────────
 // router.post('/forgot-password',          validateForgotPassword, forgotPassword);

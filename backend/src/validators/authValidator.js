@@ -20,18 +20,18 @@ const validateRegister = (req, res, next) => {
   next();
 };
 
-// // ── FGS-42 Validate đăng nhập ─────────────────────────────────────────────────
-// const validateLogin = (req, res, next) => {
-//   const { email, password } = req.body;
-//   const errors = [];
+// ── FGS-42 Validate đăng nhập ─────────────────────────────────────────────────
+const validateLogin = (req, res, next) => {
+  const { email, password } = req.body;
+  const errors = [];
 
-//   if (!email?.trim())           errors.push('Vui lòng nhập email');
-//   else if (!isValidEmail(email)) errors.push('Email không hợp lệ');
-//   if (!password)                errors.push('Vui lòng nhập mật khẩu');
+  if (!email?.trim())           errors.push('Vui lòng nhập email');
+  else if (!isValidEmail(email)) errors.push('Email không hợp lệ');
+  if (!password)                errors.push('Vui lòng nhập mật khẩu');
 
-//   if (errors.length) return next(new AppError(errors.join(', '), 400));
-//   next();
-// };
+  if (errors.length) return next(new AppError(errors.join(', '), 400));
+  next();
+};
 
 // // ── FGS-43 Validate quên mật khẩu ────────────────────────────────────────────
 // const validateForgotPassword = (req, res, next) => {

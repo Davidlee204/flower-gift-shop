@@ -36,56 +36,56 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// // ── FGS-42: POST /api/auth/login ─────────────────────────────────────────────
-// exports.login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
+// ── FGS-42: POST /api/auth/login ─────────────────────────────────────────────
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-//     // Lấy user kèm password (vì password có select: false)
-//     const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+password');
+    // Lấy user kèm password (vì password có select: false)
+    const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+password');
 
-//     if (!user || !(await user.comparePassword(password)))
-//       return next(new AppError('Email hoặc mật khẩu không đúng', 401));
+    if (!user || !(await user.comparePassword(password)))
+      return next(new AppError('Email hoặc mật khẩu không đúng', 401));
 
-//     if (!user.isActive)
-//       return next(new AppError('Tài khoản đã bị khoá, vui lòng liên hệ hỗ trợ', 403));
+    if (!user.isActive)
+      return next(new AppError('Tài khoản đã bị khoá, vui lòng liên hệ hỗ trợ', 403));
 
-//     sendTokenResponse(user, 200, res);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+    sendTokenResponse(user, 200, res);
+  } catch (err) {
+    next(err);
+  }
+};
 
-// // ── FGS-42: POST /api/auth/logout ────────────────────────────────────────────
-// exports.logout = async (req, res, next) => {
-//   try {
-//     // Xoá refreshToken khỏi DB
-//     await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
-//     res.json({ success: true, message: 'Đăng xuất thành công' });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+// ── FGS-42: POST /api/auth/logout ────────────────────────────────────────────
+exports.logout = async (req, res, next) => {
+  try {
+    // Xoá refreshToken khỏi DB
+    await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+    res.json({ success: true, message: 'Đăng xuất thành công' });
+  } catch (err) {
+    next(err);
+  }
+};
 
-// // ── FGS-42: POST /api/auth/refresh-token ─────────────────────────────────────
-// exports.refreshToken = async (req, res, next) => {
-//   try {
-//     const { refreshToken } = req.body;
-//     if (!refreshToken) return next(new AppError('Không có refresh token', 401));
+// ── FGS-42: POST /api/auth/refresh-token ─────────────────────────────────────
+exports.refreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return next(new AppError('Không có refresh token', 401));
 
-//     const jwt = require('jsonwebtoken');
-//     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
-//     const user = await User.findOne({ _id: decoded.id }).select('+refreshToken');
-//     if (!user || user.refreshToken !== refreshToken)
-//       return next(new AppError('Refresh token không hợp lệ', 401));
+    const user = await User.findOne({ _id: decoded.id }).select('+refreshToken');
+    if (!user || user.refreshToken !== refreshToken)
+      return next(new AppError('Refresh token không hợp lệ', 401));
 
-//     const newAccessToken = generateAccessToken(user._id);
-//     res.json({ success: true, accessToken: newAccessToken });
-//   } catch (err) {
-//     next(new AppError('Refresh token hết hạn, vui lòng đăng nhập lại', 401));
-//   }
-// };
+    const newAccessToken = generateAccessToken(user._id);
+    res.json({ success: true, accessToken: newAccessToken });
+  } catch (err) {
+    next(new AppError('Refresh token hết hạn, vui lòng đăng nhập lại', 401));
+  }
+};
 
 // // ── FGS-43: POST /api/auth/forgot-password ───────────────────────────────────
 // exports.forgotPassword = async (req, res, next) => {
