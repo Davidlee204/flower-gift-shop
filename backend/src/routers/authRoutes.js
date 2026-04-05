@@ -42,10 +42,10 @@ const userRouter = require('express').Router();
 userRouter.get('/me',    protect, getMe);
 userRouter.patch('/me',  protect, updateMe);
 
-// // ── FGS-45 Quản lý địa chỉ ───────────────────────────────────────────────────
-// userRouter.get('/me/addresses',        protect, getAddresses);
-// userRouter.post('/me/addresses',       protect, validateAddress, addAddress);
-// userRouter.put('/me/addresses/:id',    protect, validateAddress, updateAddress);
-// userRouter.delete('/me/addresses/:id', protect, deleteAddress);
+// ── FGS-45 Quản lý địa chỉ ───────────────────────────────────────────────────
+userRouter.get('/me/addresses',        protect, getAddresses);
+userRouter.post('/me/addresses',       protect, validateAddress, addAddress);
+userRouter.put('/me/addresses/:id',    protect, validateAddress, updateAddress);
+userRouter.delete('/me/addresses/:id', protect, deleteAddress);
 
 module.exports.userRouter = userRouter;
