@@ -2,7 +2,7 @@
 // Chỉnh sửa: Loại bỏ icon emoji, sử dụng ảnh từ seed, dữ liệu từ API (TODO)
 import { Link } from 'react-router-dom';
 
-// TODO: Khi API hoàn thiện, lấy dữ liệu từ API thay vì hardcode
+
 const CATEGORIES = [
   { id: 1, name: 'Hoa Hồng',           slug: 'hoa-hong',           image: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=600' },
   { id: 2, name: 'Hoa Cưới',           slug: 'hoa-cuoi',           image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600' },
