@@ -19,6 +19,7 @@ app.use('/api/users', userRouter);
 // Sprint 2 → mở API backend cho frontend HomePage
 app.use('/api/products',   require('./routers/productRoutes'));
 app.use('/api/categories', require('./routers/categoryRoutes'));
+app.use('/api/wishlist',   require('./routers/wishlistRoutes'));
 
 // Sprint 3 → uncomment khi làm
 // app.use('/api/orders',   require('./routers/orderRoutes'));
