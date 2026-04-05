@@ -26,11 +26,11 @@ router.post('/login',         validateLogin, login);
 router.post('/logout',        protect, logout);
 router.post('/refresh-token', refreshToken);
 
-// // ── FGS-43 Quên / Đặt lại mật khẩu ──────────────────────────────────────────
-// router.post('/forgot-password',          validateForgotPassword, forgotPassword);
-// router.post('/reset-password/:token',    validateResetPassword,  resetPassword);
+// ── FGS-43 Quên / Đặt lại mật khẩu ──────────────────────────────────────────
+router.post('/forgot-password',          validateForgotPassword, forgotPassword);
+router.post('/reset-password/:token',    validateResetPassword,  resetPassword);
 
-// module.exports = router;
+module.exports = router;
 
 
 // // ─────────────────────────────────────────────────────────────────────────────

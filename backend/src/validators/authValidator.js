@@ -33,23 +33,23 @@ const validateLogin = (req, res, next) => {
   next();
 };
 
-// // ── FGS-43 Validate quên mật khẩu ────────────────────────────────────────────
-// const validateForgotPassword = (req, res, next) => {
-//   const { email } = req.body;
-//   if (!email?.trim() || !isValidEmail(email))
-//     return next(new AppError('Vui lòng nhập email hợp lệ', 400));
-//   next();
-// };
+// ── FGS-43 Validate quên mật khẩu ────────────────────────────────────────────
+const validateForgotPassword = (req, res, next) => {
+  const { email } = req.body;
+  if (!email?.trim() || !isValidEmail(email))
+    return next(new AppError('Vui lòng nhập email hợp lệ', 400));
+  next();
+};
 
-// // ── Validate đặt lại mật khẩu ────────────────────────────────────────────────
-// const validateResetPassword = (req, res, next) => {
-//   const { password, confirmPassword } = req.body;
-//   if (!password || password.length < 6)
-//     return next(new AppError('Mật khẩu tối thiểu 6 ký tự', 400));
-//   if (password !== confirmPassword)
-//     return next(new AppError('Mật khẩu xác nhận không khớp', 400));
-//   next();
-// };
+// ── Validate đặt lại mật khẩu ────────────────────────────────────────────────
+const validateResetPassword = (req, res, next) => {
+  const { password, confirmPassword } = req.body;
+  if (!password || password.length < 6)
+    return next(new AppError('Mật khẩu tối thiểu 6 ký tự', 400));
+  if (password !== confirmPassword)
+    return next(new AppError('Mật khẩu xác nhận không khớp', 400));
+  next();
+};
 
 // // ── Validate địa chỉ (dùng cho FGS-45) ───────────────────────────────────────
 // const validateAddress = (req, res, next) => {
