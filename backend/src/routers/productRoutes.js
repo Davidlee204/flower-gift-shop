@@ -4,7 +4,7 @@ const reviewCtrl = require('../controllers/reviewController');
 const { protect, adminOnly } = require('../middlewares/authMiddleware');
 
 // ── Public ────────────────────────────────────────────────────────────────────
-router.get('/search',              ctrl.search);
+router.get('/search',              ctrl.search);        // API tìm kiếm nằm ở đây
 router.get('/featured',            ctrl.getFeatured);
 router.get('/',                    ctrl.getAll);
 router.get('/:id',                 ctrl.getOne);
