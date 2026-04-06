@@ -23,7 +23,8 @@ app.use('/api/wishlist',   require('./routers/wishlistRoutes'));
 app.use('/api/notifications', require('./routers/notificationRoutes'));
 
 // Sprint 3 → uncomment khi làm
-// app.use('/api/orders',   require('./routers/orderRoutes'));
+app.use('/api/orders',   require('./routers/orderRoutes'));
+app.use('/api/payment',       require('./routers/paymentRoutes'));
 app.use('/api/coupons',  require('./routers/couponRoutes'));
 
 // Sprint 4 → uncomment khi làm
