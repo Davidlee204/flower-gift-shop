@@ -1,28 +1,12 @@
 // FGS-54: feat(FGS-54): thiết kế homepage UI với hero section và categories
-// Chỉnh sửa: Loại bỏ icon emoji, sử dụng ảnh từ seed, dữ liệu từ API (TODO)
+// Cập nhật: lấy dữ liệu categories + featured products từ backend API
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-
-const CATEGORIES = [
-  { id: 1, name: 'Hoa Hồng',           slug: 'hoa-hong',           image: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=600' },
-  { id: 2, name: 'Hoa Cưới',           slug: 'hoa-cuoi',           image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600' },
-  { id: 3, name: 'Hoa Sinh Nhật',      slug: 'hoa-sinh-nhat',      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600' },
-  { id: 4, name: 'Hoa Khai Trương',    slug: 'hoa-khai-truong',    image: 'https://images.unsplash.com/photo-1490750967868-88df5691cc11?w=600' },
-  { id: 5, name: 'Hoa Chia Buồn',      slug: 'hoa-chia-buon',      image: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600' },
-  { id: 6, name: 'Quà Tặng Hoa',       slug: 'qua-tang-hoa',       image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600' },
-  { id: 7, name: 'Hoa Tươi Hàng Ngày', slug: 'hoa-tuoi-hang-ngay', image: 'https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=600' },
-  { id: 8, name: 'Giỏ Hoa',            slug: 'gio-hoa',            image: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600' },
-];
-
-// Sản phẩm nổi bật — lấy từ seed: 4 sản phẩm hot nhất (có onSale)
-const FEATURED = [
-  { id: 1, name: 'Bó Hoa Hồng Đỏ 20 Bông', price: 350000, salePrice: 299000, image: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=400&h=300&fit=crop', discount: 15 },
-  { id: 2, name: 'Hộp Hoa Hồng Pastel Mix', price: 450000, salePrice: 0,        image: 'https://images.unsplash.com/photo-1487530811015-780f44c3b09e?w=400&h=300&fit=crop', mustHave: true },
-  { id: 3, name: 'Bó Hoa Hồng Phấn Lãng Mạn', price: 380000, salePrice: 320000, image: 'https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=400&h=300&fit=crop', discount: 16 },
-  { id: 4, name: 'Giỏ Hoa Lan Hồ Điệp Cao Cấp', price: 950000, salePrice: 850000, image: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400&h=300&fit=crop', discount: 10 },
-];
+import { shopService } from '../services/shopService';
 
 const formatVND = (n) => n.toLocaleString('vi-VN') + '₫';
+
+const placeholderImage = 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&auto=format&fit=crop&q=80';
 
 // Component Category Card — hiển thị ảnh thay vì icon
 const CategoryCard = ({ name, slug, image }) => (
@@ -71,9 +55,55 @@ const ProductCard = ({ name, price, salePrice, image, discount, mustHave }) => (
   </div>
 );
 
-const HomePage = () => (
-  <div className="bg-gray-50 min-h-screen">
-    {/* ── Hero Section ── */}
+const HomePage = () => {
+  const [categories, setCategories] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setError(null);
+      try {
+        const [categoryRes, featuredRes] = await Promise.all([
+          shopService.getCategories(),
+          shopService.getFeaturedProducts(8),
+        ]);
+
+        if (categoryRes.data?.success) setCategories(categoryRes.data.categories || []);
+        if (featuredRes.data?.success) setFeaturedProducts(featuredRes.data.products || []);
+      } catch (err) {
+        console.error('HomePage API error', err);
+        setError('Không thể tải dữ liệu từ server. Vui lòng thử lại sau.');
+      } finally {
+        setLoadingCategories(false);
+        setLoadingProducts(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const categoryItems = loadingCategories
+    ? Array.from({ length: 4 }, (_, i) => ({ id: i, name: 'Đang tải...', slug: '', image: placeholderImage }))
+    : categories;
+
+  const productItems = loadingProducts
+    ? Array.from({ length: 4 }, (_, i) => ({ id: i, name: 'Đang tải...', price: 0, salePrice: 0, image: placeholderImage, discount: 0, mustHave: false }))
+    : featuredProducts.map((product) => ({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      salePrice: product.salePrice || 0,
+      image: product.images?.[0] || placeholderImage,
+      discount: product.salePrice > 0 ? Math.round((1 - product.salePrice / product.price) * 100) : 0,
+      mustHave: product.isFeatured || product.salePrice > 0,
+    }));
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      {/* ── Hero Section ── */}
     <section className="relative bg-gradient-to-r from-pink-600 to-rose-600 text-white overflow-hidden">
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-20 w-40 h-40 rounded-full bg-white blur-3xl"></div>
@@ -142,7 +172,12 @@ const HomePage = () => (
         <p className="text-gray-600">Chọn từ 8 danh mục hoa và quà tặng</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {CATEGORIES.map((c) => <CategoryCard key={c.id} {...c} />)}
+        {error && (
+          <div className="col-span-full rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">
+            {error}
+          </div>
+        )}
+        {categoryItems.map((c) => <CategoryCard key={c.id || c._id} {...c} />)}
       </div>
     </section>
 
@@ -153,7 +188,7 @@ const HomePage = () => (
         <p className="text-gray-600">Top 4 sản phẩm bán chạy nhất tuần này</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {FEATURED.map((p) => <ProductCard key={p.id} {...p} />)}
+        {productItems.map((p) => <ProductCard key={p.id} {...p} />)}
       </div>
     </section>
 
@@ -180,6 +215,7 @@ const HomePage = () => (
       </div>
     </section>
   </div>
-);
+  );
+};
 
 export default HomePage;
