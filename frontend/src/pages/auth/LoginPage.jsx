@@ -20,6 +20,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [showPass, setShowPass] = useState(false);
+  const [serverError, setServerError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,14 +41,25 @@ const LoginPage = () => {
     setTouched({ email: true, password: true });
     if (Object.keys(errs).length) return;
 
+    setServerError('');
     const result = await login(values);
-    if (result.success) navigate('/');
+    if (result.success) {
+      navigate('/');
+    } else {
+      setServerError(result.message);
+    }
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 max-w-md w-full">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">Đăng nhập</h1>
       <p className="text-sm text-gray-600 mb-8">Chào mừng bạn quay trở lại</p>
+
+      {serverError && (
+        <div className="mb-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">
+          {serverError}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input

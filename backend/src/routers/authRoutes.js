@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {
   register, login, logout, refreshToken,
-  forgotPassword, resetPassword,
+  forgotPassword, resetPassword, changePassword,
 } = require('../controllers/authController');
 
 const {
@@ -16,7 +16,7 @@ const {
   validateAddress,
 } = require('../validators/authValidator');
 
-const { protect } = require('../middlewares/authMiddleware');
+const { protect, adminOnly } = require('../middlewares/authMiddleware');
 
 // ── FGS-41 Đăng ký ───────────────────────────────────────────────────────────
 router.post('/register', validateRegister, register);
@@ -29,6 +29,7 @@ router.post('/refresh-token', refreshToken);
 // ── FGS-43 Quên / Đặt lại mật khẩu ──────────────────────────────────────────
 router.post('/forgot-password',          validateForgotPassword, forgotPassword);
 router.post('/reset-password/:token',    validateResetPassword,  resetPassword);
+router.post('/change-password',          changePassword);
 
 module.exports = router;
 
@@ -47,5 +48,51 @@ userRouter.get('/me/addresses',        protect, getAddresses);
 userRouter.post('/me/addresses',       protect, validateAddress, addAddress);
 userRouter.put('/me/addresses/:id',    protect, validateAddress, updateAddress);
 userRouter.delete('/me/addresses/:id', protect, deleteAddress);
+
+// ── Admin User Management ────────────────────────────────────────────────────
+// GET /api/users - Danh sách users (admin only)
+userRouter.get('/', protect, adminOnly, async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const users = await User.find().select('-password -refreshToken');
+    res.json({ success: true, data: users });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT /api/users/:id/role - Đổi role user
+userRouter.put('/:id/role', protect, adminOnly, async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const { role } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
+    res.json({ success: true, message: 'Cập nhật vai trò thành công', user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT /api/users/:id/lock - Khóa user
+userRouter.put('/:id/lock', protect, adminOnly, async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const user = await User.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
+    res.json({ success: true, message: 'Đã khóa user', user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT /api/users/:id/unlock - Mở khóa user
+userRouter.put('/:id/unlock', protect, adminOnly, async (req, res, next) => {
+  try {
+    const User = require('../models/User');
+    const user = await User.findByIdAndUpdate(req.params.id, { isActive: true }, { new: true });
+    res.json({ success: true, message: 'Đã mở khóa user', user });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports.userRouter = userRouter;

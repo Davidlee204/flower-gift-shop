@@ -1,6 +1,8 @@
 // FGS-15: feat(FGS-15): thêm trang quản lý địa chỉ với CRUD operations
+// FGS-15: feat(FGS-15): thêm trang quản lý địa chỉ
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { userService } from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -156,38 +158,43 @@ const AddressPage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user?.addresses) {
-      setAddresses(user.addresses);
+    loadAddresses();
+  }, []);
+
+  const loadAddresses = async () => {
+    try {
+      const response = await userService.getAddresses();
+      if (response.data?.success) {
+        setAddresses(response.data.addresses || []);
+      }
+    } catch (error) {
+      console.error('Load addresses error:', error);
+      alert('Không thể tải danh sách địa chỉ');
     }
-  }, [user]);
+  };
 
   const handleSave = async (addressData) => {
     setLoading(true);
     try {
-      // TODO: Call API save address
-      // const response = await api.post('/users/me/addresses', addressData);
-      // if (response.data.success) {
-      //   setAddresses(response.data.addresses);
-      //   setShowForm(false);
-      //   setEditingAddress(null);
-      // }
+      let response;
+      if (editingAddress) {
+        response = await userService.updateAddress(editingAddress._id, addressData);
+      } else {
+        response = await userService.addAddress(addressData);
+      }
 
-      // Temporary: simulate success
-      setTimeout(() => {
-        if (editingAddress) {
-          setAddresses(prev => prev.map(addr =>
-            addr._id === editingAddress._id ? { ...addr, ...addressData } : addr
-          ));
-        } else {
-          const newAddress = { ...addressData, _id: Date.now().toString() };
-          setAddresses(prev => [...prev, newAddress]);
-        }
+      if (response.data?.success) {
+        await loadAddresses();
         setShowForm(false);
         setEditingAddress(null);
-        setLoading(false);
-      }, 1000);
+        alert('✓ ' + (editingAddress ? 'Cập nhật' : 'Thêm') + ' địa chỉ thành công');
+      } else {
+        alert(response.data?.message || 'Có lỗi xảy ra');
+      }
     } catch (error) {
-      alert('Có lỗi xảy ra, vui lòng thử lại');
+      const message = error.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại';
+      alert(message);
+    } finally {
       setLoading(false);
     }
   };
@@ -196,16 +203,16 @@ const AddressPage = () => {
     if (!confirm('Bạn có chắc muốn xóa địa chỉ này?')) return;
 
     try {
-      // TODO: Call API delete address
-      // const response = await api.delete(`/users/me/addresses/${addressId}`);
-      // if (response.data.success) {
-      //   setAddresses(response.data.addresses);
-      // }
-
-      // Temporary: simulate success
-      setAddresses(prev => prev.filter(addr => addr._id !== addressId));
+      const response = await userService.deleteAddress(addressId);
+      if (response.data?.success) {
+        await loadAddresses();
+        alert('✓ Đã xóa địa chỉ');
+      } else {
+        alert(response.data?.message || 'Có lỗi xảy ra');
+      }
     } catch (error) {
-      alert('Có lỗi xảy ra, vui lòng thử lại');
+      const message = error.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại';
+      alert(message);
     }
   };
 

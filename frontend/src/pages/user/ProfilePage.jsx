@@ -1,6 +1,7 @@
 // FGS-14: feat(FGS-14): thêm trang hồ sơ cá nhân với form chỉnh sửa
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { userService } from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -14,7 +15,7 @@ const validate = (v) => {
 };
 
 const ProfilePage = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, updateUser } = useAuth();
   const [values, setValues] = useState({
     fullName: '',
     email: '',
@@ -27,7 +28,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (user) {
       setValues({
-        fullName: user.fullName || '',
+        fullName: user.fullName || user.name || '',
         email: user.email || '',
         phone: user.phone || '',
       });
@@ -55,13 +56,31 @@ const ProfilePage = () => {
 
     setSaving(true);
     try {
-      // TODO: Call API update profile
-      setTimeout(() => {
-        alert('Cập nhật hồ sơ thành công!');
-        setSaving(false);
-      }, 1000);
+      const response = await userService.updateMe({
+        fullName: values.fullName,
+        phone: values.phone
+      });
+
+      if (response.data?.success) {
+        const updatedUser = response.data?.user || response.data?.data || {
+          ...user,
+          fullName: values.fullName,
+          phone: values.phone,
+        };
+        updateUser(updatedUser);
+        setValues((prev) => ({
+          ...prev,
+          fullName: updatedUser.fullName || prev.fullName,
+          phone: updatedUser.phone || prev.phone,
+        }));
+        alert('✓ Cập nhật hồ sơ thành công!');
+      } else {
+        setErrors({ general: response.data?.message || 'Có lỗi xảy ra' });
+      }
     } catch (error) {
-      setErrors({ general: 'Có lỗi xảy ra, vui lòng thử lại' });
+      const message = error.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại';
+      setErrors({ general: message });
+    } finally {
       setSaving(false);
     }
   };

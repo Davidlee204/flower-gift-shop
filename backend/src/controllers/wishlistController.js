@@ -6,7 +6,7 @@ const AppError = require('../utils/AppError');
 exports.get = async (req, res, next) => {
   try {
     const wishlist = await Wishlist.findOne({ user: req.user._id })
-      .populate('products', 'name slug price salePrice images ratingAvg');
+      .populate('products', '_id name slug price salePrice images ratingAvg');
     res.json({ success: true, products: wishlist?.products || [] });
   } catch (err) { next(err); }
 };
@@ -26,7 +26,7 @@ exports.add = async (req, res, next) => {
       await wishlist.save();
     }
 
-    await wishlist.populate('products', 'name slug price salePrice images ratingAvg');
+    await wishlist.populate('products', '_id name slug price salePrice images ratingAvg');
     res.json({ success: true, message: 'Đã thêm vào yêu thích', products: wishlist.products });
   } catch (err) { next(err); }
 };
@@ -40,7 +40,7 @@ exports.remove = async (req, res, next) => {
     if (!wishlist) return res.json({ success: true, products: [] });
     wishlist.products = wishlist.products.filter(id => id.toString() !== productId);
     await wishlist.save();
-    await wishlist.populate('products', 'name slug price salePrice images ratingAvg');
+    await wishlist.populate('products', '_id name slug price salePrice images ratingAvg');
     res.json({ success: true, message: 'Đã xoá khỏi yêu thích', products: wishlist.products });
   } catch (err) { next(err); }
 };

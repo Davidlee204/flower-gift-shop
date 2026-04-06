@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb+srv://admin:0943128047@flower-gift-shop.u79j2lb.mongodb.net/?appName=flower-gift-shop
+      - JWT_SECRET=flower_gift_shop_secret_2026
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api

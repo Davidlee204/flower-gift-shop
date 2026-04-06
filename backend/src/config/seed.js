@@ -11,7 +11,7 @@ const connectDB = async () => {
 // SCHEMAS
 // ============================
 const userSchema = new mongoose.Schema({
-  name: String, email: String, password: String,
+  fullName: String, email: String, password: String,
   phone: String, role: { type: String, default: 'user' },
   isEmailVerified: { type: Boolean, default: true },
   isActive: { type: Boolean, default: true },
@@ -84,15 +84,15 @@ const IMG = {
 const seedUsers = async () => {
   const pw = await bcrypt.hash('123456', 12);
   await User.insertMany([
-    { name: 'Admin Flower Shop', email: 'admin@flowershop.com', password: pw, phone: '0901234567', role: 'admin',
+    { fullName: 'Admin Flower Shop', email: 'admin@flowershop.com', password: pw, phone: '0901234567', role: 'admin',
       addresses: [{ label: 'Văn phòng', fullName: 'Admin Flower Shop', phone: '0901234567', street: '123 Nguyễn Huệ', ward: 'Bến Nghé', district: 'Quận 1', city: 'TP. Hồ Chí Minh', isDefault: true }] },
-    { name: 'Lê Văn Quý', email: 'quy@flowershop.com', password: pw, phone: '0912345678', role: 'user',
+    { fullName: 'Lê Văn Quý', email: 'leejackquy@gmail.com', password: pw, phone: '0912345678', role: 'user',
       addresses: [{ label: 'Nhà', fullName: 'Lê Văn Quý', phone: '0912345678', street: '456 Lê Lợi', ward: 'Phường 3', district: 'Quận 5', city: 'TP. Hồ Chí Minh', isDefault: true }] },
-    { name: 'Nguyễn Văn Đức', email: 'duc@flowershop.com', password: pw, phone: '0923456789', role: 'user',
+    { fullName: 'Nguyễn Văn Đức', email: 'duc@flowershop.com', password: pw, phone: '0923456789', role: 'user',
       addresses: [{ label: 'Nhà', fullName: 'Nguyễn Văn Đức', phone: '0923456789', street: '789 Trần Hưng Đạo', ward: 'Phường 7', district: 'Quận 3', city: 'TP. Hồ Chí Minh', isDefault: true }] },
-    { name: 'Nguyễn Thị Lan', email: 'lan@gmail.com', password: pw, phone: '0934567890', role: 'user',
+    { fullName: 'Nguyễn Thị Lan', email: 'lan@gmail.com', password: pw, phone: '0934567890', role: 'user',
       addresses: [{ label: 'Nhà', fullName: 'Nguyễn Thị Lan', phone: '0934567890', street: '12 Võ Văn Tần', ward: 'Phường 6', district: 'Quận 3', city: 'TP. Hồ Chí Minh', isDefault: true }] },
-    { name: 'Trần Văn Nam', email: 'nam@gmail.com', password: pw, phone: '0945678901', role: 'user' },
+    { fullName: 'Trần Văn Nam', email: 'nam@gmail.com', password: pw, phone: '0945678901', role: 'user' },
   ]);
   console.log('✅ Đã tạo 5 users');
 };
