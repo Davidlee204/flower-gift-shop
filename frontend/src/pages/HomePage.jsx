@@ -198,7 +198,7 @@ const HomePage = () => {
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-12">Tại sao chọn Flower Gift?</h2>
         <div className="grid md:grid-cols-4 gap-8">
           {[
-            { title: 'Hoa tươi 100%', desc: 'Nhập trực từ vườn hoa hàng ngày' },
+            { title: 'Hoa tươi 100%', desc: 'Nhập trực tiếp từ vườn hoa hàng ngày' },
             { title: 'Giao nhanh', desc: 'Trong 2 giờ nội thành TP.HCM' },
             { title: 'Gói quà miễn phí', desc: 'Với tất cả đơn hàng' },
             { title: 'Hỗ trợ 24/7', desc: 'Chat, gọi, email hỗ trợ liên tục' },

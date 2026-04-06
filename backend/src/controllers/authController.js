@@ -156,3 +156,46 @@ exports.resetPassword = async (req, res, next) => {
     next(err);
   }
 };
+
+// ── POST /api/auth/change-password ──────────────────────────────────────────────
+// FGS-03: Inline password change (no email required)
+// Body: { email, currentPassword, newPassword }
+exports.changePassword = async (req, res, next) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    // Validate input
+    if (!email || !currentPassword || !newPassword) {
+      return next(new AppError('Vui lòng nhập đầy đủ email, mật khẩu hiện tại và mật khẩu mới', 400));
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return next(new AppError('Không tìm thấy tài khoản với email này', 404));
+    }
+
+    // Verify current password
+    const isPasswordMatch = await user.matchPassword(currentPassword);
+    if (!isPasswordMatch) {
+      return next(new AppError('Mật khẩu hiện tại không đúng', 401));
+    }
+
+    // Update password
+    user.password     = newPassword;
+    user.refreshToken = undefined; // Force re-login
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại.',
+      user: {
+        _id: user._id,
+        email: user.email,
+        fullName: user.fullName
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -13,7 +13,7 @@ const protect = async (req, res, next) => {
     if (!token) return next(new AppError('Vui lòng đăng nhập để tiếp tục', 401));
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Lấy user từ DB (bỏ qua password)
     const user = await User.findById(decoded.id);

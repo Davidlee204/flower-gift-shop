@@ -82,7 +82,10 @@ exports.search = async (req, res, next) => {
 // ── GET /api/products/featured ───────────────────────────────────────────────
 exports.getFeatured = async (req, res, next) => {
   try {
-    const products = await Product.find({ isActive: true, isFeatured: true })
+    const products = await Product.find({
+      isActive: true,
+      $or: [{ isFeatured: true }, { salePrice: { $gt: 0 } }],
+    })
       .populate('category', 'name slug')
       .sort({ sold: -1 })
       .limit(8);
