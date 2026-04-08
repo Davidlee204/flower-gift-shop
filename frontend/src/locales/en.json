@@ -1,0 +1,265 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "categories": "Categories",
+    "login": "Login",
+    "register": "Register"
+  },
+  "menu": {
+    "profile": "My Profile",
+    "address": "Address",
+    "wishlist": "Wishlist",
+    "reviews": "My Reviews",
+    "orders": "Orders",
+    "admin": "Dashboard",
+    "logout": "Logout"
+  },
+  "footer": {
+    "description": "Delivering fresh flowers and gifts on time with true emotions.",
+    "links": "Quick Links",
+    "support": "Support"
+  },
+  "hero": {
+    "badge": "✨ 2-hour delivery — Ho Chi Minh City",
+    "title": "Send love through every flower",
+    "subtitle": "Premium fresh flowers + On-time delivery + Sincere love. Order today, receive today!",
+    "btn_products": "View Products",
+    "btn_register": "Register"
+  },
+  "stats": {
+    "products": "Products",
+    "reviews": "Reviews",
+    "customers": "Customers"
+  },
+  "home": {
+    "loading": "Loading...",
+    "search_placeholder": "Find flowers, gifts, occasions...",
+    "btn_search": "Search",
+    "cat_title": "Featured Categories",
+    "cat_subtitle": "Choose from 8 categories of flowers and gifts",
+    "featured_title": "Featured Products",
+    "featured_subtitle": "Top 4 bestselling products this week",
+    "bestseller": "Bestseller",
+    "add_to_cart": "Add to Cart",
+    "error_load": "Could not load data from server. Please try again later."
+  },
+  "why": {
+    "title": "Why Choose Flower Gift?",
+    "item1_title": "100% Fresh Flowers",
+    "item1_desc": "Imported directly from gardens daily",
+    "item2_title": "Fast Delivery",
+    "item2_desc": "Within 2 hours in HCM City",
+    "item3_title": "Free Gift Wrap",
+    "item3_desc": "For all orders",
+    "item4_title": "24/7 Support",
+    "item4_desc": "Chat, call, email support available"
+  },
+  "cart": {
+  "title": "Your Cart",
+  "items": "items",
+  "empty": "Empty Cart",
+  "empty_desc": "Please add products to continue shopping",
+  "continue_shopping": "Continue Shopping",
+  "remove": "Remove",
+  "summary": "Order Summary",
+  "coupon_label": "Discount Code",
+  "apply": "Apply",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping Fee",
+  "shipping_free": "Free (orders over 200k)",
+  "discount": "Discount",
+  "total": "Total",
+  "checkout_btn": "Proceed to Checkout",
+  "coupon_applied": "Applied code",
+  "coupon_invalid": "Invalid code",
+  "feature1": "Fresh flowers quality checked",
+  "feature2": "Fast delivery within 2 hours",
+  "feature3": "Secure payment with SSL"
+},
+"category_list": {
+    "badge": "Product Categories",
+    "title": "Explore Gift and Flower Categories",
+    "subtitle": "Choose the right category to find products for every occasion.",
+    "error_default": "Could not load categories",
+    "error_fetch": "Error loading categories. Please try again later."
+  },
+  "category": {
+    "not_found": "Category not found",
+    "back_home": "Back to Home",
+    "discover": "Discover",
+    "products_in_cat": "products in this category",
+    "showing": "Showing",
+    "items": "items",
+    "empty": "There are no products in this category at the moment",
+    "sort": {
+      "newest": "Newest",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "best_seller": "Best Seller",
+      "rating": "Top Rated"
+    }
+  },
+  "checkout": {
+    "page_title": "Checkout",
+    "page_subtitle": "Complete your order",
+    "steps": {
+      "review": "Review",
+      "address": "Address",
+      "payment": "Payment"
+    },
+    "review_title": "Review Order",
+    "qty": "Quantity",
+    "btn_next_address": "Continue to address",
+    "address_title": "Select Shipping Address",
+    "no_address": "No address found. Please add an address first.",
+    "btn_back": "Back",
+    "btn_next": "Continue",
+    "payment_title": "Payment Method",
+    "methods": {
+      "cod_label": "💵 Cash on Delivery",
+      "cod_desc": "Pay with cash upon delivery",
+      "card_label": "💳 Credit/Debit Card",
+      "card_desc": "All major international cards supported",
+      "bank_label": "🏦 Bank Transfer",
+      "bank_desc": "Direct bank wire transfer"
+    },
+    "btn_processing": "Processing...",
+    "btn_complete": "Complete Order",
+    "summary_title": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping Fee",
+    "shipping_free": "FREE",
+    "total": "TOTAL",
+    "promo": "Offers",
+    "promo_desc": "Free shipping for orders over 500K",
+    "alert_address": "Please select a shipping address"
+  },
+  "notif": {
+    "title": "Notifications",
+    "new_count": "You have {{count}} new notifications",
+    "no_new": "No new notifications",
+    "mark_all": "Mark all as read",
+    "empty_title": "No notifications",
+    "empty_desc": "You will receive updates about your orders and promotions here",
+    "mark_read": "MARK AS READ",
+    "order_success_title": "🎉 Order Successful!",
+    "order_success_desc": "Your order #{{id}} has been received. We will deliver your flowers soon."
+  },
+  "order_conf": {
+    "not_found": "Order not found",
+    "success_title": "Order Successful!",
+    "success_subtitle": "Thank you for choosing us",
+    "order_id": "Order ID",
+    "order_date": "Order Date",
+    "items_title": "Ordered Items",
+    "shipping_address": "Shipping Address",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping Fee",
+    "total_label": "TOTAL",
+    "btn_track": "Track My Order",
+    "btn_continue": "Continue Shopping",
+    "notes": {
+      "process_time": "Processing time",
+      "hours": "hours",
+      "delivery_est": "Estimated Delivery",
+      "delivery_text": "Today or tomorrow",
+      "support": "Support",
+      "support_text": "Contact us if you have any questions"
+    }
+  },
+  "orders": {
+    "history_title": "Order History",
+    "history_subtitle": "View and manage all your orders",
+    "empty": "No orders yet",
+    "start_shopping": "Start Shopping",
+    "order_id": "Order ID",
+    "date": "Date",
+    "total": "Total",
+    "status_label": "Status",
+    "btn_details": "Details",
+    "btn_cancel": "Cancel",
+    "not_found": "Order not found",
+    "back_to_history": "Back to History",
+    "placed_at": "Placed at",
+    "items": "Items",
+    "qty": "Quantity",
+    "shipping_address": "Shipping Address",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping Fee",
+    "total_label": "TOTAL",
+    "btn_track": "Track Delivery",
+    "btn_back": "Back",
+    "completed": "Completed",
+    "waiting": "Pending",
+    "need_help": "📞 Need help?",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipping": "Shipping",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "cancel": {
+      "title": "Cancel Order",
+      "note_label": "Note",
+      "note_text": "You will receive a full refund within 5-7 business days",
+      "reason_label": "Reason for cancellation",
+      "reason_placeholder": "Please enter a reason...",
+      "reason_required": "Please enter a reason for cancellation",
+      "btn_no": "No, go back",
+      "btn_confirm": "Confirm Cancellation",
+      "processing": "Processing...",
+      "success_msg": "✓ Order has been cancelled"
+    }
+  },
+  "product_detail": {
+    "loading": "Loading product...",
+    "not_found": "Product not found",
+    "back_to_list": "Back to list",
+    "reviews": "reviews",
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "quantity": "Quantity",
+    "add_cart_btn": "Add to Cart",
+    "wishlist_btn": "Add to Wishlist",
+    "write_review_btn": "Write a Review",
+    "related_title": "Related Products",
+    "add_success_msg": "Added {{qty}} items to cart",
+    "wishlist_added": "✓ Added to wishlist",
+    "wishlist_removed": "✓ Removed from wishlist"
+  },
+  "product_list": {
+    "subtitle": "Find your favorite fresh flowers",
+    "all_cats": "All Categories",
+    "price_range": "Price Range",
+    "from": "From",
+    "to": "To",
+    "sort_title": "Sort by",
+    "no_products": "No products found",
+    "error_load": "Could not load products"
+  },"review_page": {
+    "title": "My Reviews",
+    "subtitle": "The product reviews you have submitted",
+    "empty_title": "No reviews yet",
+    "empty_desc": "You haven't reviewed any products yet",
+    "view_products_btn": "Browse Products",
+    "view_product_link": "View product",
+    "confirm_delete": "Are you sure you want to delete this review?"
+  },
+  "search": {
+    "guide": "Please enter keywords to search for products",
+    "loading": "Searching...",
+    "no_result_title": "No results found",
+    "no_result_desc": "There are no products matching \"{{query}}\"",
+    "view_all_btn": "View all products",
+    "result_for": "Search results for \"{{query}}\" ({{count}} results)"
+  },"wishlist_page": {
+    "subtitle": "Products you have favorited",
+    "login_required": "Login Required",
+    "login_desc": "Please login to view your wishlist",
+    "empty_title": "Wishlist is empty",
+    "empty_desc": "You haven't added any products to your wishlist yet",
+    "error_load": "Error loading wishlist"
+  }
+}

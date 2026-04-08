@@ -1,0 +1,266 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "categories": "Danh mục",
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
+  },
+  "menu": {
+    "profile": "Hồ sơ cá nhân",
+    "address": "Địa chỉ",
+    "wishlist": "Danh sách yêu thích",
+    "reviews": "Đánh giá của tôi",
+    "orders": "Đơn hàng",
+    "admin": "Quản trị",
+    "logout": "Đăng xuất"
+  },
+  "cart": {
+    "title": "Giỏ hàng của bạn",
+    "items": "sản phẩm",
+    "empty": "Giỏ hàng trống",
+    "empty_desc": "Hãy thêm sản phẩm vào để tiếp tục mua sắm",
+    "continue_shopping": "Tiếp tục mua sắm",
+    "remove": "Xoá",
+    "summary": "Tổng hợp đơn hàng",
+    "coupon_label": "Mã giảm giá",
+    "apply": "Áp dụng",
+    "subtotal": "Tạm tính",
+    "shipping": "Phí giao hàng",
+    "shipping_free": "Miễn phí (mua trên 200k)",
+    "discount": "Giảm giá",
+    "total": "Tổng cộng",
+    "checkout_btn": "Thanh toán",
+    "coupon_applied": "Áp dụng mã",
+    "coupon_invalid": "Mã không hợp lệ",
+    "feature1": "Hoa tươi được kiểm tra chất lượng",
+    "feature2": "Giao hàng nhanh trong 2 giờ",
+    "feature3": "Thanh toán an toàn với SSL"
+  },
+  "footer": {
+    "description": "Giao hoa tươi và quà tặng tận nơi, đúng giờ, đúng cảm xúc.",
+    "links": "Liên kết",
+    "support": "Hỗ trợ"
+  },
+  "hero": {
+    "badge": "✨ Giao hoa trong 2 giờ — Nội thành TP.HCM",
+    "title": "Gửi yêu thương qua từng đóa hoa",
+    "subtitle": "Hoa tươi cao cấp + Giao đúng giờ + Yêu thương chân thành. Đặt hôm nay, nhận hôm nay!",
+    "btn_products": "Xem sản phẩm",
+    "btn_register": "Đăng ký"
+  },
+  "stats": {
+    "products": "Sản phẩm",
+    "reviews": "Đánh giá",
+    "customers": "Khách hàng"
+  },
+  "home": {
+    "loading": "Đang tải...",
+    "search_placeholder": "Tìm hoa, quà tặng, dịp lễ...",
+    "btn_search": "Tìm kiếm",
+    "cat_title": "Danh mục nổi bật",
+    "cat_subtitle": "Chọn từ 8 danh mục hoa và quà tặng",
+    "featured_title": "Sản phẩm nổi bật",
+    "featured_subtitle": "Top 4 sản phẩm bán chạy nhất tuần này",
+    "bestseller": "Bestseller",
+    "add_to_cart": "Thêm vào giỏ",
+    "error_load": "Không thể tải dữ liệu từ server. Vui lòng thử lại sau."
+  },
+  "why": {
+    "title": "Tại sao chọn Flower Gift?",
+    "item1_title": "Hoa tươi 100%",
+    "item1_desc": "Nhập trực tiếp từ vườn hoa hàng ngày",
+    "item2_title": "Giao nhanh",
+    "item2_desc": "Trong 2 giờ nội thành TP.HCM",
+    "item3_title": "Gói quà miễn phí",
+    "item3_desc": "Với tất cả đơn hàng",
+    "item4_title": "Hỗ trợ 24/7",
+    "item4_desc": "Chat, gọi, email hỗ trợ liên tục"
+  },
+  "category_list": {
+    "badge": "Danh mục sản phẩm",
+    "title": "Khám phá các danh mục quà tặng và hoa",
+    "subtitle": "Chọn đúng danh mục để tìm sản phẩm phù hợp với mọi dịp.",
+    "error_default": "Không thể tải danh mục",
+    "error_fetch": "Lỗi tải danh mục. Vui lòng thử lại sau."
+  },
+  "category": {
+    "not_found": "Danh mục không tồn tại",
+    "back_home": "Quay lại trang chủ",
+    "discover": "Khám phá",
+    "products_in_cat": "sản phẩm trong danh mục này",
+    "showing": "Hiển thị",
+    "items": "sản phẩm",
+    "empty": "Hiện tại không có sản phẩm trong danh mục này",
+    "sort": {
+      "newest": "Mới nhất",
+      "price_asc": "Giá thấp → cao",
+      "price_desc": "Giá cao → thấp",
+      "best_seller": "Bán chạy",
+      "rating": "Đánh giá cao"
+    }
+  },
+  "checkout": {
+    "page_title": "Thanh toán",
+    "page_subtitle": "Hoàn tất đơn hàng của bạn",
+    "steps": {
+      "review": "Kiểm tra",
+      "address": "Địa chỉ",
+      "payment": "Thanh toán"
+    },
+    "review_title": "Kiểm tra đơn hàng",
+    "qty": "Số lượng",
+    "btn_next_address": "Tiếp tục để chọn địa chỉ",
+    "address_title": "Chọn địa chỉ giao hàng",
+    "no_address": "Chưa có địa chỉ. Vui lòng thêm địa chỉ trước.",
+    "btn_back": "Quay lại",
+    "btn_next": "Tiếp tục",
+    "payment_title": "Phương thức thanh toán",
+    "methods": {
+      "cod_label": "💵 Thanh toán khi nhận",
+      "cod_desc": "Thanh toán tiền mặt khi nhận hàng",
+      "card_label": "💳 Thẻ credit/debit",
+      "card_desc": "Các thẻ quốc tế được hỗ trợ",
+      "bank_label": "🏦 Chuyển khoản",
+      "bank_desc": "Chuyển khoản ngân hàng"
+    },
+    "btn_processing": "Đang xử lý...",
+    "btn_complete": "Hoàn tất đơn hàng",
+    "summary_title": "Tóm tắt đơn hàng",
+    "subtotal": "Tạm tính",
+    "shipping": "Phí giao hàng",
+    "shipping_free": "MIỄN PHÍ",
+    "total": "TỔNG CỘNG",
+    "promo": "Ưu đãi",
+    "promo_desc": "Miễn phí ship cho đơn hàng > 500K",
+    "alert_address": "Vui lòng chọn địa chỉ giao hàng"
+  },
+  "notif": {
+    "title": "Thông báo",
+    "new_count": "Bạn có {{count}} thông báo mới",
+    "no_new": "Không có thông báo mới",
+    "mark_all": "Đánh dấu tất cả là đã đọc",
+    "empty_title": "Không có thông báo nào",
+    "empty_desc": "Bạn sẽ nhận được thông báo về đơn hàng và khuyến mãi",
+    "mark_read": "ĐÁNH DẤU LÀ ĐÃ ĐỌC",
+    "order_success_title": "🎉 Đặt hàng thành công!",
+    "order_success_desc": "Đơn hàng #{{id}} của bạn đã được ghi nhận. Chúng tôi sẽ sớm giao hoa cho bạn."
+  },
+  "order_conf": {
+    "not_found": "Không tìm thấy đơn hàng",
+    "success_title": "Đơn hàng thành công!",
+    "success_subtitle": "Cảm ơn bạn đã tin tưởng chúng tôi",
+    "order_id": "Mã đơn hàng",
+    "order_date": "Ngày đặt hàng",
+    "items_title": "Sản phẩm đã đặt",
+    "shipping_address": "Địa chỉ giao hàng",
+    "subtotal": "Tạm tính",
+    "shipping": "Phí giao hàng",
+    "total_label": "TỔNG CỘNG",
+    "btn_track": "Theo dõi đơn hàng",
+    "btn_continue": "Tiếp tục mua sắm",
+    "notes": {
+      "process_time": "Thời gian xử lý",
+      "hours": "giờ",
+      "delivery_est": "Dự kiến giao",
+      "delivery_text": "Hôm nay hoặc ngày mai",
+      "support": "Hỗ trợ",
+      "support_text": "Liên hệ chúng tôi nếu có thắc mắc"
+    }
+  },
+  "orders": {
+    "history_title": "Lịch sử đơn hàng",
+    "history_subtitle": "Xem và quản lý tất cả đơn hàng của bạn",
+    "empty": "Chưa có đơn hàng nào",
+    "start_shopping": "Bắt đầu mua sắm",
+    "order_id": "Mã đơn hàng",
+    "date": "Ngày đặt",
+    "total": "Tổng tiền",
+    "status_label": "Trạng thái",
+    "btn_details": "Chi tiết",
+    "btn_cancel": "Hủy",
+    "not_found": "Không tìm thấy đơn hàng",
+    "back_to_history": "Quay lại lịch sử",
+    "placed_at": "Đặt lúc",
+    "items": "Sản phẩm",
+    "qty": "Số lượng",
+    "shipping_address": "Địa chỉ giao hàng",
+    "subtotal": "Tạm tính",
+    "shipping": "Phí giao hàng",
+    "total_label": "TỔNG CỘNG",
+    "btn_track": "Theo dõi giao hàng",
+    "btn_back": "Quay lại",
+    "completed": "Hoàn thành",
+    "waiting": "Chờ xử lý",
+    "need_help": "📞 Cần hỗ trợ?",
+    "status": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "shipping": "Đang giao",
+      "delivered": "Đã giao",
+      "cancelled": "Đã hủy"
+    },
+    "cancel": {
+      "title": "Hủy đơn hàng",
+      "note_label": "Lưu ý",
+      "note_text": "Bạn sẽ được hoàn tiền đầy đủ trong 5-7 ngày làm việc",
+      "reason_label": "Lý do hủy đơn",
+      "reason_placeholder": "Vui lòng nhập lý do hủy đơn...",
+      "reason_required": "Vui lòng nhập lý do hủy đơn",
+      "btn_no": "Không, quay lại",
+      "btn_confirm": "Xác nhận hủy",
+      "processing": "Đang xử lý...",
+      "success_msg": "✓ Đơn hàng đã được hủy"
+    }
+  },
+  "product_detail": {
+    "loading": "Đang tải sản phẩm...",
+    "not_found": "Sản phẩm không tồn tại",
+    "back_to_list": "Quay lại danh sách",
+    "reviews": "đánh giá",
+    "in_stock": "Còn hàng",
+    "out_of_stock": "Hết hàng",
+    "quantity": "Số lượng",
+    "add_cart_btn": "Thêm vào giỏ hàng",
+    "wishlist_btn": "Thêm vào yêu thích",
+    "write_review_btn": "Viết đánh giá",
+    "related_title": "Sản phẩm liên quan",
+    "add_success_msg": "Đã thêm {{qty}} sản phẩm vào giỏ hàng",
+    "wishlist_added": "✓ Đã thêm vào yêu thích",
+    "wishlist_removed": "✓ Đã xóa khỏi yêu thích"
+  },
+  "product_list": {
+    "subtitle": "Tìm kiếm hoa tươi yêu thích của bạn",
+    "all_cats": "Tất cả danh mục",
+    "price_range": "Khoảng giá",
+    "from": "Từ",
+    "to": "Đến",
+    "sort_title": "Sắp xếp",
+    "no_products": "Không tìm thấy sản phẩm nào",
+    "error_load": "Không thể tải sản phẩm"
+  },"review_page": {
+    "title": "Đánh giá của tôi",
+    "subtitle": "Những đánh giá sản phẩm bạn đã gửi",
+    "empty_title": "Chưa có đánh giá nào",
+    "empty_desc": "Bạn chưa đánh giá sản phẩm nào",
+    "view_products_btn": "Xem sản phẩm",
+    "view_product_link": "Xem sản phẩm",
+    "confirm_delete": "Bạn có chắc muốn xóa đánh giá này?"
+  },
+  "search": {
+    "guide": "Hãy nhập từ khoá để tìm kiếm sản phẩm",
+    "loading": "Đang tìm kiếm...",
+    "no_result_title": "Không tìm thấy kết quả",
+    "no_result_desc": "Không có sản phẩm nào khớp với \"{{query}}\"",
+    "view_all_btn": "Xem tất cả sản phẩm",
+    "result_for": "Kết quả tìm kiếm cho \"{{query}}\" ({{count}} kết quả)"
+  },
+  "wishlist_page": {
+    "subtitle": "Những sản phẩm bạn đang yêu thích",
+    "login_required": "Vui lòng đăng nhập",
+    "login_desc": "Bạn cần đăng nhập để xem danh sách yêu thích",
+    "empty_title": "Danh sách yêu thích trống",
+    "empty_desc": "Bạn chưa thêm sản phẩm nào vào danh sách yêu thích",
+    "error_load": "Lỗi tải danh sách yêu thích"
+  }
+}

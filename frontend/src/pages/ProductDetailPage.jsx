@@ -1,18 +1,17 @@
-// FGS-13, 18: Chi tiết sản phẩm + Sản phẩm liên quan
-// Purpose: Hiển thị chi tiết sản phẩm, hình ảnh, giá, mô tả, rating, review, sản phẩm gợi ý liên quan
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { shopService } from '../services/shopService';
 import ReviewModal from '../components/ReviewModal';
+import api from '../services/axiosConfig'; // ĐÃ THÊM: Import api để gọi Backend
 
 const formatVND = (n) => n.toLocaleString('vi-VN') + '₫';
 
 const ProductDetailPage = () => {
-  // Lấy slug sản phẩm từ URL params
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  // State quản lý sản phẩm hiện tại, sản phẩm liên quan
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,20 +19,15 @@ const ProductDetailPage = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [showReviewModal, setShowReviewModal] = useState(false);
 
-  // Load chi tiết sản phẩm & sản phẩm liên quan
   useEffect(() => {
     const loadProduct = async () => {
       setLoading(true);
       try {
-        // Tìm sản phẩm theo slug từ API
-        // Để đơn giản, ta gọi /api/products để lấy tất cả, sau đó filter
-        // (trong thực tế nên có endpoint /api/products/slug/:slug)
         const res = await shopService.getProducts({ limit: 100 });
         if (res.data?.success) {
           const found = res.data.products.find((p) => p.slug === slug);
           if (found) {
             setProduct(found);
-            // Load sản phẩm liên quan (cùng category)
             const related = await shopService.getProducts({
               category: found.category._id || found.category,
               limit: 4,
@@ -58,7 +52,7 @@ const ProductDetailPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
-          <p className="text-gray-600 mt-4">Đang tải sản phẩm...</p>
+          <p className="text-gray-600 mt-4">{t('product_detail.loading', 'Đang tải...')}</p>
         </div>
       </div>
     );
@@ -68,12 +62,12 @@ const ProductDetailPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Sản phẩm không tồn tại</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('product_detail.not_found', 'Không tìm thấy sản phẩm')}</h1>
           <button
             onClick={() => navigate('/products')}
             className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg"
           >
-            Quay lại danh sách
+            {t('product_detail.back_to_list', 'Quay lại danh sách')}
           </button>
         </div>
       </div>
@@ -82,7 +76,6 @@ const ProductDetailPage = () => {
 
   const discount = product.salePrice > 0 ? Math.round((1 - product.salePrice / product.price) * 100) : 0;
 
-  // Handle adding product to cart
   const handleAddToCart = () => {
     try {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -105,41 +98,56 @@ const ProductDetailPage = () => {
       localStorage.setItem('cart', JSON.stringify(cart));
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('cart:updated'));
-      alert('✓ Đã thêm ' + quantity + ' sản phẩm vào giỏ hàng');
+      alert(`✓ ${t('product_detail.add_success_msg', { qty: quantity })}`);
       setQuantity(1);
     } catch (error) {
       console.error('Add to cart error:', error);
-      alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+      alert(t('common.error', 'Có lỗi xảy ra'));
     }
   };
 
-  // Handle adding product to wishlist
-  const handleAddToWishlist = () => {
+  // ĐÃ SỬA: Hàm gọi API Backend để Thêm/Xóa yêu thích
+  const handleAddToWishlist = async () => {
     try {
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      const exists = wishlist.find(item => item._id === product._id);
+      const currentWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      
+      // Kiểm tra xem sản phẩm đã có trong LocalStorage chưa
+      const isAlreadyLiked = currentWishlist.includes(product._id) || 
+                             currentWishlist.some(item => item._id === product._id);
 
-      if (!exists) {
-        wishlist.push({
-          _id: product._id,
-          slug: product.slug,
-          name: product.name,
-          price: product.price,
-          salePrice: product.salePrice,
-          image: product.images?.[0]
-        });
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        alert('✓ Đã thêm vào yêu thích');
+      let response;
+
+      // Gọi API tương ứng
+      if (isAlreadyLiked) {
+        response = await api.delete(`/wishlist/${product._id}`);
       } else {
-        wishlist.splice(wishlist.indexOf(exists), 1);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        alert('✓ Đã xóa khỏi yêu thích');
+        response = await api.post(`/wishlist/${product._id}`);
       }
-      window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('wishlist:updated'));
+      
+      // Đồng bộ lại dữ liệu
+      if (response.data?.success) {
+        // Chỉ lưu mảng ID để đồng bộ với trang WishlistPage
+        const productIds = response.data.products.map(p => p._id || p);
+        localStorage.setItem('wishlist', JSON.stringify(productIds));
+
+        // Bắn sự kiện cập nhật số lượng
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new CustomEvent('wishlist:updated'));
+
+        if (isAlreadyLiked) {
+          alert(`💔 ${t('product_detail.wishlist_removed', 'Đã xóa khỏi danh sách yêu thích')}`);
+        } else {
+          alert(`❤️ ${t('product_detail.wishlist_added', 'Đã thêm vào danh sách yêu thích')}`);
+        }
+      }
     } catch (error) {
-      console.error('Add to wishlist error:', error);
-      alert('Có lỗi xảy ra khi thêm vào yêu thích');
+      console.error('Wishlist error:', error);
+      if (error.response?.status === 401) {
+        alert(t('wishlist_page.login_required', 'Vui lòng đăng nhập để sử dụng tính năng này!'));
+        navigate('/login');
+      } else {
+        alert(t('common.error', 'Có lỗi xảy ra, vui lòng thử lại'));
+      }
     }
   };
 
@@ -149,11 +157,11 @@ const ProductDetailPage = () => {
         {/* Breadcrumb */}
         <div className="text-sm text-gray-600 mb-8">
           <button onClick={() => navigate('/')} className="hover:text-pink-500">
-            Trang chủ
+            {t('nav.home', 'Trang chủ')}
           </button>
           {' / '}
           <button onClick={() => navigate('/products')} className="hover:text-pink-500">
-            Danh sách sản phẩm
+            {t('nav.products', 'Sản phẩm')}
           </button>
           {' / '}
           <span className="text-gray-800 font-medium">{product.name}</span>
@@ -188,19 +196,18 @@ const ProductDetailPage = () => {
 
           {/* Product Info */}
           <div className="bg-white rounded-lg p-6">
-            {/* Tên sản phẩm */}
             <h1 className="text-3xl font-bold text-gray-800 mb-4">{product.name}</h1>
 
-            {/* Rating & Reviews */}
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center">
                 <span className="text-yellow-500">★★★★★</span>
-                <span className="text-gray-600 ml-2">({product.ratingCount || 0} đánh giá)</span>
+                <span className="text-gray-600 ml-2">({product.ratingCount || 0} {t('product_detail.reviews', 'đánh giá')})</span>
               </div>
-              <span className="text-green-600 font-medium">{product.stock > 0 ? 'Còn hàng' : 'Hết hàng'}</span>
+              <span className={`font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {product.stock > 0 ? t('product_detail.in_stock', 'Còn hàng') : t('product_detail.out_of_stock', 'Hết hàng')}
+              </span>
             </div>
 
-            {/* Giá */}
             <div className="mb-6">
               <div className="flex items-center gap-3">
                 <span className="text-4xl font-bold text-pink-500">
@@ -215,25 +222,11 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
-            {/* Mô tả */}
             <p className="text-gray-700 mb-6">{product.description}</p>
 
-            {/* Thẻ tags */}
-            {product.tags && product.tags.length > 0 && (
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2">
-                  {product.tags.map((tag) => (
-                    <span key={tag} className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Quantity & Add to Cart */}
+            {/* Quantity & Actions */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Số lượng</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('product_detail.quantity', 'Số lượng')}</label>
               <div className="flex items-center gap-2 mb-4">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -257,19 +250,29 @@ const ProductDetailPage = () => {
                 </button>
               </div>
 
-              <button onClick={handleAddToCart} disabled={product.stock === 0} className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg mb-2 transition">
-                🛒 Thêm vào giỏ hàng ({quantity})
+              <button 
+                onClick={handleAddToCart} 
+                disabled={product.stock === 0} 
+                className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg mb-2 transition"
+              >
+                🛒 {t('product_detail.add_cart_btn', 'Thêm vào giỏ hàng')} ({quantity})
               </button>
-              <button onClick={handleAddToWishlist} className="w-full border-2 border-pink-500 text-pink-500 hover:bg-pink-50 font-bold py-3 rounded-lg transition mb-2">
-                ❤️ Thêm vào yêu thích
+              <button 
+                onClick={handleAddToWishlist} 
+                className="w-full border-2 border-pink-500 text-pink-500 hover:bg-pink-50 font-bold py-3 rounded-lg transition mb-2"
+              >
+                ❤️ {t('product_detail.wishlist_btn', 'Yêu thích')}
               </button>
-              <button onClick={() => setShowReviewModal(true)} className="w-full border-2 border-yellow-400 text-yellow-600 hover:bg-yellow-50 font-bold py-3 rounded-lg transition mb-4">
-                ⭐ Viết đánh giá
+              <button 
+                onClick={() => setShowReviewModal(true)} 
+                className="w-full border-2 border-yellow-400 text-yellow-600 hover:bg-yellow-50 font-bold py-3 rounded-lg transition mb-4"
+              >
+                ⭐ {t('product_detail.write_review_btn', 'Viết đánh giá')}
               </button>
               <div className="border-t pt-4 text-sm text-gray-600">
-                <p>✓ Hoa tươi 100% từ vườn hoa</p>
-                <p>✓ Giao hàng trong 2 giờ nội thành</p>
-                <p>✓ Hoàn tiền nếu không hài lòng</p>
+                <p>✓ {t('cart.feature1', 'Giao hàng tận nơi')}</p>
+                <p>✓ {t('cart.feature2', 'Tặng kèm thiệp')}</p>
+                <p>✓ {t('cart.feature3', 'Đảm bảo hoa tươi')}</p>
               </div>
             </div>
           </div>
@@ -278,7 +281,7 @@ const ProductDetailPage = () => {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Sản phẩm liên quan</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('product_detail.related_title', 'Sản phẩm liên quan')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((p) => (
                 <div
