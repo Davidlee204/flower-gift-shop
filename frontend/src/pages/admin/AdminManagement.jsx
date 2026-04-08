@@ -204,17 +204,15 @@ export const AdminOrdersPage = () => {
     loadOrders();
   }, [user, navigate]);
 
-  const loadOrders = async () => {
+  const loadOrders = () => {
+    setLoading(true);
     try {
-      setLoading(true);
       setError('');
-      const response = await adminService.getAdminOrders();
-      const orders = response.data?.data || response.data?.orders || response.data || [];
-      setOrders(Array.isArray(orders) ? orders : []);
+      // Lấy từ kho chung mà CheckoutPage đã lưu
+      const savedOrders = JSON.parse(localStorage.getItem('all_orders') || '[]');
+      setOrders(savedOrders);
     } catch (err) {
-      const message = err.response?.data?.message || err.message || 'Lỗi tải đơn hàng';
-      setError('Lỗi: ' + message);
-      console.error('Load orders error:', err);
+      setError('Lỗi tải đơn hàng từ hệ thống');
     } finally {
       setLoading(false);
     }
@@ -225,21 +223,22 @@ export const AdminOrdersPage = () => {
     alert(`Xem chi tiết đơn hàng #${orderId}`);
   };
 
-  const handleStatusChange = async (orderId, newStatus) => {
-    try {
-      setLoading(true);
-      await adminService.updateOrderStatus(orderId, newStatus);
-      setOrders(orders.map(o => 
-        o._id === orderId ? { ...o, status: newStatus } : o
-      ));
-      alert('✓ Cập nhật trạng thái đơn hàng thành công');
-    } catch (err) {
-      setError('Lỗi cập nhật trạng thái: ' + (err.response?.data?.message || err.message));
-      alert('❌ Cập nhật thất bại: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Dòng 147
+const handleStatusChange = async (orderId, newStatus) => {
+  try {
+    setLoading(true);
+    await adminService.updateOrderStatus(orderId, newStatus);
+    setOrders(orders.map(o => 
+      o._id === orderId ? { ...o, status: newStatus } : o
+    ));
+    alert('✓ Cập nhật trạng thái đơn hàng thành công');
+  } catch (err) {
+    setError('Lỗi cập nhật trạng thái: ' + (err.response?.data?.message || err.message));
+    alert('❌ Cập nhật thất bại: ' + (err.response?.data?.message || err.message));
+  } finally {
+    setLoading(false);
+  }
+};
 
   const statusColors = {
     pending: 'bg-amber-100 text-amber-700',
@@ -279,17 +278,32 @@ export const AdminOrdersPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map(order => (
-                  <tr key={order._id} className="border-b hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-800">#{order._id}</td>
-                    <td className="px-6 py-4 text-gray-700">{order.userInfo?.fullName || order.customer || 'N/A'}</td>
-                    <td className="px-6 py-4 text-gray-600">{order.createdAt ? new Date(order.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                    <td className="px-6 py-4 font-bold text-pink-600">{(order.totalPrice || 0).toLocaleString()}₫</td>
+                {orders.map((order) => (
+                  <tr key={order.id} className="border-b hover:bg-gray-50 transition">
+                    {/* Cột Mã đơn: Dùng order.id */}
+                    <td className="px-6 py-4 font-bold text-gray-800">
+                      #{order.id ? order.id.toString().slice(-8) : '---'}
+                    </td>
+
+                    {/* Cột Khách hàng: Dùng order.customerName */}
+                    <td className="px-6 py-4 text-gray-700">
+                      {order.customerName || 'N/A'}
+                    </td>
+
+                    <td className="px-6 py-4 text-gray-600">
+                      {order.createdAt ? new Date(order.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
+                    </td>
+
+                    {/* Cột Tổng tiền: Dùng order.total */}
+                    <td className="px-6 py-4 font-bold text-pink-600">
+                      {(order.total || 0).toLocaleString()}₫
+                    </td>
+
                     <td className="px-6 py-4">
                       <select
                         value={order.status}
-                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        className={`px-3 py-1 rounded-full font-bold border-0 cursor-pointer ${statusColors[order.status]}`}
+                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        className={`px-3 py-1 rounded-full font-bold border-0 cursor-pointer ${statusColors[order.status] || 'bg-gray-100'}`}
                       >
                         <option value="pending">pending</option>
                         <option value="confirmed">confirmed</option>
@@ -298,14 +312,15 @@ export const AdminOrdersPage = () => {
                         <option value="cancelled">cancelled</option>
                       </select>
                     </td>
-                  <td className="px-6 py-4 text-center">
-                    <button onClick={() => handleViewDetails(order._id)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-3 py-1 rounded-lg text-sm transition">
-                      Xem chi tiết
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                    <td className="px-6 py-4 text-center">
+                      {/* Chỗ này cũng phải là order.id */}
+                      <button onClick={() => handleViewDetails(order.id)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-3 py-1 rounded-lg text-sm transition">
+                        Xem chi tiết
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
           </table>
         </div>
         )}

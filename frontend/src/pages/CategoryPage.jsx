@@ -1,7 +1,6 @@
-// FGS-17: Xem danh mục - trang hiển thị sản phẩm theo danh mục được chọn
-// Purpose: Khi click vào một danh mục, hiển thị tất cả sản phẩm trong danh mục đó + lọc
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; // 1. Import
 import { shopService } from '../services/shopService';
 
 const formatVND = (n) => n.toLocaleString('vi-VN') + '₫';
@@ -38,29 +37,24 @@ const ProductCard = ({ product, onSelect }) => (
 );
 
 const CategoryPage = () => {
-  // Lấy category slug từ URL params
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // 2. Khai báo hook t
 
-  // State quản lý category & danh sách sản phẩm
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('newest');
 
-  // Load category & products
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
-        // Lấy tất cả categories và tìm theo slug
         const catRes = await shopService.getCategories();
         if (catRes.data?.success) {
           const found = catRes.data.categories.find((c) => c.slug === slug);
           if (found) {
             setCategory(found);
-
-            // Lấy sản phẩm của category này
             const prodRes = await shopService.getProducts({
               category: found._id,
               sortBy,
@@ -86,7 +80,7 @@ const CategoryPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
-          <p className="text-gray-600 mt-4">Đang tải...</p>
+          <p className="text-gray-600 mt-4">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -96,12 +90,12 @@ const CategoryPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Danh mục không tồn tại</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('category.not_found')}</h1>
           <button
             onClick={() => navigate('/')}
             className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg"
           >
-            Quay lại trang chủ
+            {t('category.back_home')}
           </button>
         </div>
       </div>
@@ -110,23 +104,20 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Category header banner */}
       <div className="bg-gradient-to-r from-pink-600 to-rose-600 text-white py-12">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-2">{category.name}</h1>
           <p className="text-pink-100 text-lg">
-            Khám phá {products.length} sản phẩm trong danh mục này
+            {t('category.discover')} {products.length} {t('category.products_in_cat')}
           </p>
         </div>
       </div>
 
-      {/* Main content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Filter bar */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <p className="text-gray-600">
-              Hiển thị <span className="font-bold text-gray-800">{products.length}</span> sản phẩm
+              {t('category.showing')} <span className="font-bold text-gray-800">{products.length}</span> {t('category.items')}
             </p>
           </div>
           <select
@@ -134,19 +125,18 @@ const CategoryPage = () => {
             onChange={(e) => setSortBy(e.target.value)}
             className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-pink-500"
           >
-            <option value="newest">Mới nhất</option>
-            <option value="price_asc">Giá thấp → cao</option>
-            <option value="price_desc">Giá cao → thấp</option>
-            <option value="best_seller">Bán chạy</option>
-            <option value="rating">Đánh giá cao</option>
+            <option value="newest">{t('category.sort.newest')}</option>
+            <option value="price_asc">{t('category.sort.price_asc')}</option>
+            <option value="price_desc">{t('category.sort.price_desc')}</option>
+            <option value="best_seller">{t('category.sort.best_seller')}</option>
+            <option value="rating">{t('category.sort.rating')}</option>
           </select>
         </div>
 
-        {/* Products grid */}
         {products.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🌸</div>
-            <p className="text-gray-600 text-lg">Hiện tại không có sản phẩm trong danh mục này</p>
+            <p className="text-gray-600 text-lg">{t('category.empty')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -160,13 +150,12 @@ const CategoryPage = () => {
           </div>
         )}
 
-        {/* Breadcrumb back */}
         <div className="mt-12 text-center">
           <button
             onClick={() => navigate('/')}
             className="text-pink-500 hover:text-pink-700 font-semibold"
           >
-            ← Quay lại trang chủ
+            ← {t('category.back_home')}
           </button>
         </div>
       </div>

@@ -1,12 +1,13 @@
-// FGS-21, 22, 23, 24: Order History, Details, Tracking, Cancel
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next'; // 1. Import
 
 // Order History Page
 export const OrderHistoryPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t, i18n } = useTranslation(); // 2. Hook
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -15,31 +16,32 @@ export const OrderHistoryPage = () => {
   }, [user?._id]);
 
   const formatVND = (n) => n.toLocaleString('vi-VN') + '₫';
+
   const statusLabels = {
-    pending: { label: '⏳ Chờ xác nhận', color: 'amber' },
-    confirmed: { label: '✓ Đã xác nhận', color: 'blue' },
-    shipping: { label: '🚚 Đang giao', color: 'purple' },
-    delivered: { label: '✓ Đã giao', color: 'green' },
-    cancelled: { label: '✕ Đã hủy', color: 'red' }
+    pending: { label: t('orders.status.pending'), color: 'amber' },
+    confirmed: { label: t('orders.status.confirmed'), color: 'blue' },
+    shipping: { label: t('orders.status.shipping'), color: 'purple' },
+    delivered: { label: t('orders.status.delivered'), color: 'green' },
+    cancelled: { label: t('orders.status.cancelled'), color: 'red' }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-4xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-2">
-          📦 Lịch sử đơn hàng
+          📦 {t('orders.history_title')}
         </h1>
-        <p className="text-gray-600 mb-8">Xem và quản lý tất cả đơn hàng của bạn</p>
+        <p className="text-gray-600 mb-8">{t('orders.history_subtitle')}</p>
 
         {orders.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
             <div className="text-6xl mb-4">📭</div>
-            <p className="text-gray-600 text-lg mb-6">Chưa có đơn hàng nào</p>
+            <p className="text-gray-600 text-lg mb-6">{t('orders.empty')}</p>
             <button
               onClick={() => navigate('/products')}
               className="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-6 py-3 rounded-xl"
             >
-              🛍️ Bắt đầu mua sắm
+              🛍️ {t('orders.start_shopping')}
             </button>
           </div>
         ) : (
@@ -50,21 +52,21 @@ export const OrderHistoryPage = () => {
                 <div key={order.id} className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition">
                   <div className="grid md:grid-cols-5 gap-4 items-center">
                     <div>
-                      <p className="text-gray-600 text-sm">Mã đơn hàng</p>
+                      <p className="text-gray-600 text-sm">{t('orders.order_id')}</p>
                       <p className="text-lg font-bold text-gray-800">#ORD{order.id}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Ngày đặt</p>
+                      <p className="text-gray-600 text-sm">{t('orders.date')}</p>
                       <p className="font-bold text-gray-800">
-                        {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+                        {new Date(order.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Tổng tiền</p>
+                      <p className="text-gray-600 text-sm">{t('orders.total')}</p>
                       <p className="text-lg font-bold text-pink-600">{formatVND(order.total)}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Trạng thái</p>
+                      <p className="text-gray-600 text-sm">{t('orders.status_label')}</p>
                       <p className={`font-bold text-${status.color}-600`}>{status.label}</p>
                     </div>
                     <div className="flex gap-2">
@@ -72,14 +74,14 @@ export const OrderHistoryPage = () => {
                         onClick={() => navigate(`/orders/${order.id}`)}
                         className="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-4 py-2 rounded-lg text-sm transition"
                       >
-                        Chi tiết
+                        {t('orders.btn_details')}
                       </button>
                       {order.status === 'pending' && (
                         <button
                           onClick={() => navigate(`/orders/${order.id}/cancel`)}
                           className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2 rounded-lg text-sm transition"
                         >
-                          Hủy
+                          {t('orders.btn_cancel')}
                         </button>
                       )}
                     </div>
@@ -99,6 +101,7 @@ export const OrderDetailsPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
@@ -107,7 +110,7 @@ export const OrderDetailsPage = () => {
     setOrder(found);
   }, [orderId, user?._id]);
 
-  if (!order) return <div className="text-center py-20 text-gray-600">Không tìm thấy đơn hàng</div>;
+  if (!order) return <div className="text-center py-20 text-gray-600">{t('orders.not_found')}</div>;
 
   const formatVND = (n) => n.toLocaleString('vi-VN') + '₫';
 
@@ -115,24 +118,23 @@ export const OrderDetailsPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12">
       <div className="max-w-4xl mx-auto px-4">
         <button onClick={() => navigate('/orders')} className="text-indigo-600 font-bold mb-6 hover:underline">
-          ← Quay lại lịch sử
+          ← {t('orders.back_to_history')}
         </button>
 
         <div className="bg-white rounded-2xl shadow-2xl border border-purple-200 p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-1">Đơn hàng #{order.id}</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-1">{t('orders.order_id')} #{order.id}</h1>
           <p className="text-gray-600 mb-8">
-            Đặt lúc: {new Date(order.createdAt).toLocaleString('vi-VN')}
+            {t('orders.placed_at')}: {new Date(order.createdAt).toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}
           </p>
 
-          {/* Items */}
           <div className="mb-8 pb-8 border-b-2 border-gray-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-800">📦 Sản phẩm</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-800">📦 {t('orders.items')}</h2>
             <div className="space-y-3">
               {order.items.map((item, idx) => (
                 <div key={idx} className="flex justify-between p-3 bg-gray-50 rounded-lg">
                   <div>
                     <p className="font-bold text-gray-800">{item.name}</p>
-                    <p className="text-sm text-gray-600">Số lượng: {item.quantity}</p>
+                    <p className="text-sm text-gray-600">{t('orders.qty')}: {item.quantity}</p>
                   </div>
                   <p className="font-bold text-gray-800">
                     {formatVND((item.salePrice > 0 ? item.salePrice : item.price) * item.quantity)}
@@ -142,27 +144,25 @@ export const OrderDetailsPage = () => {
             </div>
           </div>
 
-          {/* Address */}
           <div className="mb-8 pb-8 border-b-2 border-gray-200 p-4 bg-blue-50 rounded-xl">
-            <h2 className="text-xl font-bold mb-3 text-gray-800">📍 Địa chỉ giao hàng</h2>
+            <h2 className="text-xl font-bold mb-3 text-gray-800">📍 {t('orders.shipping_address')}</h2>
             <p className="font-bold text-gray-800">{order.address.fullName}</p>
             <p className="text-gray-600">{order.address.phone}</p>
             <p className="text-gray-600">{order.address.street}</p>
             <p className="text-gray-600">{order.address.district}, {order.address.city}</p>
           </div>
 
-          {/* Totals */}
           <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-xl space-y-2 mb-8">
             <div className="flex justify-between">
-              <span>Tạm tính:</span>
+              <span>{t('orders.subtotal')}:</span>
               <span className="font-bold">{formatVND(order.subtotal)}</span>
             </div>
             <div className="flex justify-between pb-2 border-b border-purple-300">
-              <span>Phí giao hàng:</span>
+              <span>{t('orders.shipping')}:</span>
               <span className="font-bold">{formatVND(order.shipping)}</span>
             </div>
             <div className="flex justify-between text-lg">
-              <span className="font-bold">TỔNG CỘNG:</span>
+              <span className="font-bold">{t('orders.total_label')}:</span>
               <span className="text-2xl font-black text-purple-600">{formatVND(order.total)}</span>
             </div>
           </div>
@@ -171,7 +171,7 @@ export const OrderDetailsPage = () => {
             onClick={() => navigate(`/orders/${order.id}/tracking`)}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg"
           >
-            🚚 Theo dõi giao hàng
+            🚚 {t('orders.btn_track')}
           </button>
         </div>
       </div>
@@ -184,6 +184,7 @@ export const OrderTrackingPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
@@ -201,19 +202,18 @@ export const OrderTrackingPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 py-12">
       <div className="max-w-2xl mx-auto px-4">
         <button onClick={() => navigate(`/orders/${order.id}`)} className="text-teal-600 font-bold mb-6">
-          ← Quay lại
+          ← {t('orders.btn_back')}
         </button>
 
         <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h1 className="text-3xl font-bold mb-8 text-gray-800">🚚 Theo dõi đơn hàng</h1>
+          <h1 className="text-3xl font-bold mb-8 text-gray-800">🚚 {t('orders.btn_track')}</h1>
 
-          {/* Timeline */}
           <div className="space-y-8">
             {[
-              { status: 'pending', label: 'Chờ xác nhận', icon: '⏳' },
-              { status: 'confirmed', label: 'Đã xác nhận', icon: '✓' },
-              { status: 'shipping', label: 'Đang giao', icon: '📦' },
-              { status: 'delivered', label: 'Đã giao', icon: '✓' }
+              { status: 'pending', label: t('orders.status.pending'), icon: '⏳' },
+              { status: 'confirmed', label: t('orders.status.confirmed'), icon: '✓' },
+              { status: 'shipping', label: t('orders.status.shipping'), icon: '📦' },
+              { status: 'delivered', label: t('orders.status.delivered'), icon: '✓' }
             ].map((step, idx) => {
               const isDone = statuses.indexOf(step.status) <= currentIdx;
               return (
@@ -231,7 +231,7 @@ export const OrderTrackingPage = () => {
                       {step.label}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {isDone ? '✓ Hoàn thành' : 'Chờ xử lý'}
+                      {isDone ? `✓ ${t('orders.completed')}` : t('orders.waiting')}
                     </p>
                   </div>
                 </div>
@@ -240,8 +240,8 @@ export const OrderTrackingPage = () => {
           </div>
 
           <div className="mt-12 p-6 bg-teal-50 rounded-xl border border-teal-200">
-            <p className="font-bold text-gray-800">📞 Cần hỗ trợ?</p>
-            <p className="text-gray-600 mt-1">Liên hệ chúng tôi: support@flowergift.vn</p>
+            <p className="font-bold text-gray-800">{t('orders.need_help')}</p>
+            <p className="text-gray-600 mt-1">Contact: support@flowergift.vn</p>
           </div>
         </div>
       </div>
@@ -254,6 +254,7 @@ export const OrderCancelPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [order, setOrder] = useState(null);
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
@@ -266,7 +267,7 @@ export const OrderCancelPage = () => {
 
   const handleCancel = async () => {
     if (!reason.trim()) {
-      alert('Vui lòng nhập lý do hủy đơn');
+      alert(t('orders.cancel.reason_required'));
       return;
     }
     setLoading(true);
@@ -280,7 +281,7 @@ export const OrderCancelPage = () => {
       localStorage.setItem(`orders_${user._id}`, JSON.stringify(orders));
     }
     setLoading(false);
-    alert('✓ Đơn hàng đã được hủy');
+    alert(t('orders.cancel.success_msg'));
     navigate('/orders');
   };
 
@@ -290,25 +291,25 @@ export const OrderCancelPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-red-50 py-12">
       <div className="max-w-2xl mx-auto px-4">
         <button onClick={() => navigate(`/orders/${order.id}`)} className="text-rose-600 font-bold mb-6">
-          ← Quay lại
+          ← {t('orders.btn_back')}
         </button>
 
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-rose-200">
-          <h1 className="text-3xl font-bold mb-2 text-gray-800">Hủy đơn hàng</h1>
-          <p className="text-gray-600 mb-8">Mã đơn: #{order.id}</p>
+          <h1 className="text-3xl font-bold mb-2 text-gray-800">{t('orders.cancel.title')}</h1>
+          <p className="text-gray-600 mb-8">{t('orders.order_id')}: #{order.id}</p>
 
           <div className="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
             <p className="text-sm text-amber-800">
-              ⚠️ <span className="font-bold">Lưu ý:</span> Bạn sẽ được hoàn tiền đầy đủ trong 5-7 ngày làm việc
+              ⚠️ <span className="font-bold">{t('orders.cancel.note_label')}:</span> {t('orders.cancel.note_text')}
             </p>
           </div>
 
           <div>
-            <label className="block font-bold text-gray-800 mb-3">Lý do hủy đơn</label>
+            <label className="block font-bold text-gray-800 mb-3">{t('orders.cancel.reason_label')}</label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="Vui lòng nhập lý do hủy đơn..."
+              placeholder={t('orders.cancel.reason_placeholder')}
               rows="4"
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
             />
@@ -319,14 +320,14 @@ export const OrderCancelPage = () => {
               onClick={() => navigate(`/orders/${order.id}`)}
               className="flex-1 border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:border-gray-400 transition"
             >
-              Không, quay lại
+              {t('orders.cancel.btn_no')}
             </button>
             <button
               onClick={handleCancel}
               disabled={loading}
               className="flex-1 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all"
             >
-              {loading ? 'Đang xử lý...' : 'Xác nhận hủy'}
+              {loading ? t('orders.cancel.processing') : t('orders.cancel.btn_confirm')}
             </button>
           </div>
         </div>

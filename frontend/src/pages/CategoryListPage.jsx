@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; // 1. Thêm import
 import { shopService } from '../services/shopService';
 
 const CategoryCard = ({ slug, name, image }) => (
@@ -15,6 +16,7 @@ const CategoryCard = ({ slug, name, image }) => (
 );
 
 const CategoryListPage = () => {
+  const { t } = useTranslation(); // 2. Khai báo hook t
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -27,25 +29,25 @@ const CategoryListPage = () => {
         if (response.data?.success) {
           setCategories(response.data.categories || []);
         } else {
-          setError(response.data?.message || 'Không thể tải danh mục');
+          setError(response.data?.message || t('category_list.error_default'));
         }
       } catch (err) {
         console.error('CategoryListPage error:', err);
-        setError('Lỗi tải danh mục. Vui lòng thử lại sau.');
+        setError(t('category_list.error_fetch'));
       } finally {
         setLoading(false);
       }
     };
     loadCategories();
-  }, []);
+  }, [t]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8 text-center">
-          <p className="text-sm text-pink-500 font-semibold mb-2">Danh mục sản phẩm</p>
-          <h1 className="text-4xl font-bold text-gray-900">Khám phá các danh mục quà tặng và hoa</h1>
-          <p className="text-gray-600 mt-3">Chọn đúng danh mục để tìm sản phẩm phù hợp với mọi dịp.</p>
+          <p className="text-sm text-pink-500 font-semibold mb-2">{t('category_list.badge')}</p>
+          <h1 className="text-4xl font-bold text-gray-900">{t('category_list.title')}</h1>
+          <p className="text-gray-600 mt-3">{t('category_list.subtitle')}</p>
         </div>
 
         {error && (
@@ -55,7 +57,7 @@ const CategoryListPage = () => {
         )}
 
         {loading ? (
-          <div className="text-center py-20 text-gray-600">Đang tải danh mục...</div>
+          <div className="text-center py-20 text-gray-600">{t('common.loading')}</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
