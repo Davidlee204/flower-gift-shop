@@ -163,7 +163,7 @@ Tài khoản test:
 | Email | Mật khẩu | Quyền |
 |-------|----------|-------|
 | admin@flowershop.com | 123456 | Admin |
-| quy@flowershop.com | 123456 | User |
+| leejackquy@gmail.com | 123456 | User |
 | duc@flowershop.com | 123456 | User |
 
 ---
